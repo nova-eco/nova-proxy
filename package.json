@@ -1,0 +1,48 @@
+{
+  "name": "@nova/nova-proxy",
+  "version": "0.8.0",
+  "private": true,
+  "homepage": "https://nova.eco",
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/nova-eco/nova-proxy.git"
+  },
+  "keywords": [
+    "@nova",
+    "proxy"
+  ],
+  "author": "admin <admin@nova.eco>",
+  "engines": {
+    "node": ">=20.0.9",
+    "npm": ">=10.1.0"
+  },
+  "scripts": {
+    "changelog": "auto-changelog",
+    "docker": "pnpm docker:has && pnpm docker:start",
+    "docker:has": "bash -c 'command -v docker'",
+    "docker:start": "docker compose up --build --force-recreate",
+    "docker:stop": "docker compose down --remove-orphans --rmi all",
+    "env:cp": "bash -c 'cp --update=none ./.env.TEMPLATE ./.env'",
+    "format": "pnpm format:check",
+    "format:base": "prettier .",
+    "format:check": "pnpm format:base --check",
+    "format:fix": "pnpm format:base --write",
+    "lint": "pnpm lint:docker",
+    "lint:docker": "pnpm docker:has && pnpm /^lint:docker:.*/",
+    "lint:docker:compose": "docker compose config",
+    "lint:docker:file": "docker build --check --build-arg 'BUILDKIT_DOCKERFILE_CHECK=error=true' .",
+    "postinstall": "pnpm env:cp",
+    "prestart": "pnpm format && pnpm lint && pnpm spell",
+    "spell": "pnpx cspell .",
+    "start": "pnpm start:only",
+    "start:only": "pnpm docker",
+    "stop": "pnpm docker:stop"
+  },
+  "devDependencies": {
+    "auto-changelog": "^2.5.0",
+    "cspell": "^8.18.1",
+    "prettier": "^3.3.3",
+    "prettier-plugin-sh": "^0.17.4",
+    "prettier-plugin-sort-json": "^4.1.1"
+  }
+}

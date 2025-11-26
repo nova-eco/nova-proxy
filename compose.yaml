@@ -1,0 +1,29 @@
+#####################################################################
+#                                                                   #
+# Script:  compose.yaml                                             #
+#                                                                   #
+# Purpose: Docker compose proxy server definition                   #
+#                                                                   #
+# Date:    20th November 2025                                       #
+#                                                                   #
+# Author:  nova admin <admin@nova.eco>                              #
+#                                                                   #
+#####################################################################
+
+services:
+  nova-proxy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: '${NOVA_PROXY_CONTAINER_NAME}'
+    env_file:
+      - path: .env
+        required: true
+    healthcheck:
+      interval: 1m
+      retries: 3
+      test: ['CMD', 'service', 'nginx', 'status']
+      timeout: 5s
+    ports:
+      - '${NOVA_PROXY_PORT}:${NOVA_PROXY_PORT}'
+    restart: always

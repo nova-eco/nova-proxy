@@ -1,0 +1,17 @@
+#####################################################################
+#                                                                   #
+# Script:  compose.override.yaml                                    #
+#                                                                   #
+# Purpose: Docker compose overrides for the proxy server.           #
+#                                                                   #
+# Date:    20th November 2025                                       #
+#                                                                   #
+# Author:  nova admin <admin@nova.eco>                              #
+#                                                                   #
+#####################################################################
+
+networks:
+  nova-network:
+    driver: bridge
+    internal: false
+    name: '${NOVA_PROXY_NETWORK}'
