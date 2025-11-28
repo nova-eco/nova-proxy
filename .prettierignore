@@ -19,3 +19,11 @@ CHANGELOG.md
 # Standard dirs to be ignored
 #
 node_modules/
+
+#
+# Hidden dirs to be ignored
+#
+.git
+.github
+.husky
+
