@@ -36,7 +36,7 @@
     "pre-push": "npm run check",
     "prepare": "husky",
     "prestart": "npm run check && npm run lint",
-    "spell": "pnpx cspell .",
+    "spell": "npx cspell .",
     "start": "npm run start:only",
     "start:only": "npm run docker",
     "stop": "npm run docker:stop"
