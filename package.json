@@ -1,47 +1,54 @@
 {
   "name": "@nova/nova-proxy",
   "version": "0.8.0",
-  "private": true,
+  "private": false,
   "homepage": "https://nova.eco",
   "repository": {
     "type": "git",
     "url": "git+https://gitlab.com/nova-eco/nova-proxy.git"
   },
-  "keywords": [
-    "@nova",
-    "proxy"
-  ],
+  "license": "MIT",
   "author": "admin <admin@nova.eco>",
+  "packageManager": "npm@10",
   "engines": {
-    "node": ">=20.0.9",
-    "npm": ">=10.1.0"
+    "node": ">=22",
+    "npm": ">=10"
   },
   "scripts": {
-    "changelog": "auto-changelog",
-    "docker": "pnpm docker:has && pnpm docker:start",
+    "changelog": "npx auto-changelog",
+    "changelog:commit": "git commit -m 'ci: update changelog' --no-verify",
+    "check": "npm run format && npm run analysis",
+    "commit-msg": "commitlint --edit",
+    "docker": "npm run docker:has && npm run docker:start",
     "docker:has": "bash -c 'command -v docker'",
     "docker:start": "docker compose up --build --force-recreate",
     "docker:stop": "docker compose down --remove-orphans --rmi all",
     "env:cp": "bash -c 'cp --update=none ./.env.TEMPLATE ./.env'",
-    "format": "pnpm format:check",
+    "format": "npm run  format:check",
     "format:base": "prettier .",
-    "format:check": "pnpm format:base --check",
-    "format:fix": "pnpm format:base --write",
-    "lint": "pnpm lint:docker",
-    "lint:docker": "pnpm docker:has && pnpm /^lint:docker:.*/",
+    "format:check": "npm run  format:base --check",
+    "format:fix": "npm run  format:base --write",
+    "lint": "npm run  lint:docker",
+    "lint:docker": "npm run docker:has && npm run lint:docker:dockerfile && npm run lint:docker:compose",
+    "lint:docker:dockerfile": "bash ./scripts/docker-build-check.sh",
     "lint:docker:compose": "docker compose config",
-    "lint:docker:file": "docker build --check --build-arg 'BUILDKIT_DOCKERFILE_CHECK=error=true' .",
-    "postinstall": "pnpm env:cp",
-    "prestart": "pnpm format && pnpm lint && pnpm spell",
+    "postinstall": "npm run  env:cp",
+    "pre-push": "npm run check",
+    "prepare": "husky",
+    "prestart": "npm run check && npm run lint",
     "spell": "pnpx cspell .",
-    "start": "pnpm start:only",
-    "start:only": "pnpm docker",
-    "stop": "pnpm docker:stop"
+    "start": "npm run start:only",
+    "start:only": "npm run docker",
+    "stop": "npm run docker:stop"
   },
   "devDependencies": {
     "auto-changelog": "^2.5.0",
     "cspell": "^8.18.1",
-    "prettier": "^3.3.3",
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@commitlint/format": "^20.0.0",
+        "husky": "^9.1.7",
+            "prettier": "^3.6.1",
     "prettier-plugin-sh": "^0.17.4",
     "prettier-plugin-sort-json": "^4.1.1"
   }
